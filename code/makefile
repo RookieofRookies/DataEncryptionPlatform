@@ -5,7 +5,7 @@ VPATH = ./src
 
 CC=gcc
 CFLGS= -Wall -g -I$(WORKDIR)/inc/
-LIBFLAG = -L$(HOME)/lib
+LIBFLAG = -L$(WORKER)/lib
 
 
 BIN = keymngclient  keymngserver 
