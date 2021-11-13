@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <signal.h>
+#include <time.h>
  
 #include "poolsocket.h"  
 #include "keymngserverop.h"
@@ -59,10 +60,11 @@ void *start_routine(void * arg)
 		switch(pStruct_req->cmdType) {
 			case KeyMng_NEWorUPDATE:
 				ret = MngServer_Agree(&serverInfo, pStruct_req, &res_outData, &res_outDataLen);
-			
+				
+			/*
 			case KeyMng_Check:
 				MngServer_Check(&serverInfo, pStruct_req, &res_outData, &res_outDataLen);
-			/*	
+
 			case 密钥注销:
 				mngServer_Agree();
 				*/
@@ -104,7 +106,7 @@ void *start_routine(void * arg)
 void catchSignal(int signum)
 {
 	flg = 0;
-	printf(" catch signal %d, process is going to die.\n", signum);
+	//printf(" catch signal %d, process is going to die.\n", signum);
 	
 	return ;
 }
@@ -118,6 +120,8 @@ int main(void)
 	int connfd = -1;
 	
 	pthread_t pid;
+
+	srand((unsigned)time(NULL));
 	
 	CREATE_DAEMON
 	
@@ -154,7 +158,7 @@ int main(void)
  	//服务器端环境释放 
 	sckServer_destroy();
 	
-	printf("服务器 优雅退出。\n");
+	printf("secmng服务器已退出\n");
 
 	return 0;	
 }

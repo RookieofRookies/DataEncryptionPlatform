@@ -10,8 +10,14 @@ extern "C" {
 #define		KeyMng_MallocErr		202		//分配内存失败
 
 #define		KeyMng_NEWorUPDATE		1		//1 密钥协商 
-#define		KeyMng_Check			2		//2 密钥校验
-#define		KeyMng_Revoke			3		//3 密钥注销
+#define		KeyMng_View				2		//2	密钥查看
+#define		KeyMng_Encrypt			3		//3 加密文件
+#define		KeyMng_Decrypt			4		//4 密钥校验
+//#define		KeyMng_Revoke			3		//3 密钥注销
+//#define		KeyMng_Check			4		//4 密钥校验
+
+
+
 		 		
 #define  ID_MsgKey_Teacher  80
 typedef struct _Teacher

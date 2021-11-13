@@ -1,5 +1,4 @@
 
-// keymngserverop.h
 #ifndef _KEYMNG_ServerOp_H_
 #define _KEYMNG_ServerOp_H_
 

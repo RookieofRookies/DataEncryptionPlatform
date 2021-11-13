@@ -1,6 +1,4 @@
 
-// keymngclientop.h
-
 #ifndef _KEYMNG_CLIENTOP_H_
 #define _KEYMNG_CLIENTOP_H_
 
@@ -35,11 +33,15 @@ int MngClient_Quit(MngClient_Info *pCltInfo);
 
 int MngClient_Agree(MngClient_Info *pCltInfo);
 
-int MngClient_Check(MngClient_Info *pCltInfo);
+//int MngClient_Check(MngClient_Info *pCltInfo);
 
-int MngClient_Revoke(MngClient_Info *pCltInfo);
+//int MngClient_Revoke(MngClient_Info *pCltInfo);
 
-int MngClient_view(MngClient_Info *pCltInfo);
+int MngClient_View(MngClient_Info *pCltInfo);
+
+int MngClient_Encrypt(MngClient_Info *pCltInfo);
+
+int MngClient_Decrypt(MngClient_Info *pCltInfo);
 
 
 #ifdef __cplusplus

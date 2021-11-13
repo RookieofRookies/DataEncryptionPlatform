@@ -1,12 +1,19 @@
 
-//keymnglog.h 日志头文件
+//written by wangbaoming1999@163.com
+//20140323
+//itcastlog.h 日志头文件
 
 
+#ifndef _ITCAST_LOG_H_
+#define _ITCAST_LOG_H_
 
-// keymnglog.h
-
-#ifndef _KEYMNG_LOG_H_
-#define _KEYMNG_LOG_H_
+/*
+#define IC_NO_LOG_LEVEL			0
+#define IC_DEBUG_LEVEL			1
+#define IC_INFO_LEVEL			2
+#define IC_WARNING_LEVEL		3
+#define IC_ERROR_LEVEL			4;
+*/
 
 /************************************************************************/
 /* 
@@ -23,8 +30,7 @@ const char *fmt：可变参数
 */
 /************************************************************************/
 //实际使用的Level
-extern int  KeyMngLevel[5];
-
-void KeyMng_Log(const char *file, int line, int level, int status, const char *fmt, ...);
+extern int  LogLevel[5];
+void ITDER_LOG(const char *file, int line, int level, int status, const char *fmt, ...);
 
 #endif

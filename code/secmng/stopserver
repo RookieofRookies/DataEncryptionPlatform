@@ -10,4 +10,5 @@ if [ -z ${mypid} ];then
 fi
 
 kill -10 ${mypid}
+
 echo "kill keymngserver successful"

@@ -22,9 +22,7 @@ int IPC_CreatShm(int key, int shmsize, int *shmhdl)
 {
 	int		tmpshmhdl = 0;
 	int 	ret = 0;
-	 //	创建共享内存 
-	 //	若共享内存不存在则创建 
-	 //	若共享内存已存在使用原来的
+
     tmpshmhdl = shmget(key, shmsize, IPC_CREAT|0666);
     if (tmpshmhdl == -1)			//创建失败
     {
@@ -37,19 +35,15 @@ int IPC_CreatShm(int key, int shmsize, int *shmhdl)
 }
 
 //打开共享内存 若共享内存不存在，返回错误
-//参数 无意义 可填写0
 int IPC_OpenShm(int key, int shmsize, int *shmhdl)
 {
 	int		tmpshmhdl = 0;
 	int 	ret = 0;
-	 //	创建共享内存 
-	 //	若共享内存不存在则创建 
-	 //	若共享内存已存在使用原来的
+
     tmpshmhdl = shmget(key, 0, 0);
     if (tmpshmhdl == -1)			//打开失败
     {
     	ret = MYIPC_NotEXISTErr;
-    	//printf("func shmget() err :%d ", ret);
     	return ret;
     }
     *shmhdl = tmpshmhdl;
@@ -57,13 +51,16 @@ int IPC_OpenShm(int key, int shmsize, int *shmhdl)
 	
 }
 
-/***********************************************************************
-  功能描述：    创建共享内存
+
+
+
+//创建共享内存
+/*
   参数说明：    shmname  [in]  是共享内存名,系统中唯一标志
                 shmsize  [in]  是要创建的共享内存的大小；
                 shmhdl   [out] 共享内存的句柄.
   返回值：      返回0函数执行成功；非0返回错误码
-************************************************************************/
+*/
 int IPC_CreatShmBySeedName(const char *shmseedfile, int shmsize, int *shmhdl)
 {
     if(shmflag == 0)			//判断接口中共享内存key是否已经存在
@@ -85,14 +82,9 @@ int IPC_CreatShmBySeedName(const char *shmseedfile, int shmsize, int *shmhdl)
 	return 0;
 
 }
-/***********************************************************************
-  功能描述：    关联共享内存
-  参数说明：    shmhdl	[in]  共享的句柄
-                mapaddr [out] 共享内存首地址
-  返回值：      返回0函数执行成功；非0返回错误码
-************************************************************************/
-int
-IPC_MapShm(int  shmhdl, void **mapaddr)
+
+//关联共享内存
+int IPC_MapShm(int  shmhdl, void **mapaddr)
 {
     void *tempptr = NULL;
 
@@ -104,11 +96,8 @@ IPC_MapShm(int  shmhdl, void **mapaddr)
 
     return 0;
 }
-/***********************************************************************
-  功能描述：    取消共享内存关联
-  参数说明：    unmapaddr   [in] 共享内存首地址
-  返回值：      返回0函数执行成功；非0返回错误码
-************************************************************************/
+
+//取消共享内存关联
 int IPC_UnMapShm(void *unmapaddr)
 {
     int  rv;
@@ -119,11 +108,8 @@ int IPC_UnMapShm(void *unmapaddr)
 
     return 0;
 }
-/***********************************************************************
-  功能描述：    删除共享内存
-  参数说明：    shmhdl	[in]  共享的句柄
-  返回值：      返回0函数执行成功；非0返回错误码
-************************************************************************/
+
+//删除共享内存
 int IPC_DelShm(int shmhdl)
 {
     int  rv;

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
+
 #include "keymngserverop.h"
 #include "keymng_msg.h"
 #include "keymnglog.h" 
@@ -17,7 +19,7 @@ int MngServer_InitInfo(MngServer_Info *svrInfo)
 	strcpy(svrInfo->dbpasswd, "SECMNG");
 	strcpy(svrInfo->dbsid, "orcl");
 	svrInfo->dbpoolnum = 8;	
-	strcpy(svrInfo->serverip, "127.0.0.1");
+	strcpy(svrInfo->serverip, "10.133.29.250");
 	svrInfo->serverport = 8001;
 	svrInfo->maxnode = 10;
 	svrInfo->shmkey = 0x0001;
@@ -25,8 +27,8 @@ int MngServer_InitInfo(MngServer_Info *svrInfo)
 	
 	ret = KeyMng_ShmInit(svrInfo->shmkey, svrInfo->maxnode, &svrInfo->shmhdl);
 	if (ret != 0) {
-		printf("---------·şÎñÆ÷´´½¨/´ò¿ª ¹²ÏíÄÚ´æÊ§°Ü-----\n");
-		KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[4], ret, "·şÎñÆ÷ KeyMng_ShmInit() err:%d", ret);
+		printf("---------æœåŠ¡å™¨åˆ›å»º/æ‰“å¼€ å…±äº«å†…å­˜å¤±è´¥-----\n");
+		KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[4], ret, "æœåŠ¡å™¨ KeyMng_ShmInit() err:%d", ret);
 		return ret;
 	}
 	
@@ -40,45 +42,51 @@ int MngServer_Agree(MngServer_Info *svrInfo, MsgKey_Req *msgkeyReq, unsigned cha
 	MsgKey_Res msgKey_Res;
 	
 	NodeSHMInfo nodeSHMInfo;
+
+	//ç”¨äºç”Ÿæˆå¯†é’¥éšæœºæ•°çš„æ•°ç»„
+	char randkey[] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 
+						'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+							'z', 'x', 'c', 'v', 'b', 'n', 'm'};
 	
-	// --½áºÏ r1 r2 Éú³ÉÃÜÔ¿  ---> ³É¹¦¡¢Ê§°Ü rv
+	// --ç»“åˆ r1 r2 ç”Ÿæˆå¯†é’¥  ---> æˆåŠŸã€å¤±è´¥ rv
 	
 	if (strcmp(svrInfo->serverId, msgkeyReq->serverId) != 0) {
-		KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[4], ret, "¿Í»§¶Ë·ÃÎÊÁË´íÎóµÄ·şÎñÆ÷");
+		KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[4], ret, "å®¢æˆ·ç«¯è®¿é—®äº†é”™è¯¯çš„æœåŠ¡å™¨");
 		return -1;	
 	}
 	
-	// ×éÖ¯ Ó¦´ğ½á¹¹Ìå res £º rv r2 clientId serverId  seckeyid
-	msgKey_Res.rv = 0; 	//0 ³É¹¦ 1 Ê§°Ü¡£
+	// ç»„ç»‡ åº”ç­”ç»“æ„ä½“ res ï¼š rv r2 clientId serverId  seckeyid
+	msgKey_Res.rv = 0; 	//0 æˆåŠŸ 1 å¤±è´¥ã€‚
 	strcpy(msgKey_Res.clientId, msgkeyReq->clientId); 
 	strcpy(msgKey_Res.serverId, msgkeyReq->serverId); 
 	
-	// Éú³ÉËæ»úÊı r2
+	// ç”Ÿæˆéšæœºæ•° r2
 	for (i = 0; i < 64; i++) {
-		msgKey_Res.r2[i] = 'a' + i;			
+		int r = rand() % 26;
+		msgKey_Res.r2[i] = randkey[r];		
 	}	
 	msgKey_Res.seckeyid = seckeyid++;
 	
-	// ×éÖ¯ÃÜÔ¿½ÚµãĞÅÏ¢½á¹¹Ìå
+	// ç»„ç»‡å¯†é’¥èŠ‚ç‚¹ä¿¡æ¯ç»“æ„ä½“
 	for (i = 0; i < 64; i++) {
 		nodeSHMInfo.seckey[2*i] = msgkeyReq->r1[i];
 		nodeSHMInfo.seckey[2*i+1] = msgKey_Res.r2[i];
 	}
-	nodeSHMInfo.status = 0;  //0-ÓĞĞ§ 1ÎŞĞ§
+	nodeSHMInfo.status = 0;  //0-æœ‰æ•ˆ 1æ— æ•ˆ
 	strcpy(nodeSHMInfo.clientId, msgkeyReq->clientId);
 	strcpy(nodeSHMInfo.serverId, msgkeyReq->serverId);
 	nodeSHMInfo.seckeyid = msgKey_Res.seckeyid;
 
-	// --Ğ´Èë¹²ÏíÄÚ´æ¡£
+	// --å†™å…¥å…±äº«å†…å­˜ã€‚
 	ret = KeyMng_ShmWrite(svrInfo->shmhdl, svrInfo->maxnode, &nodeSHMInfo);
 	if (ret != 0) {
-		KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[4], ret, "·şÎñÆ÷ KeyMng_ShmWrite() err:%d", ret);
+		KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[4], ret, "æœåŠ¡å™¨ KeyMng_ShmWrite() err:%d", ret);
 		return ret;	
 	}
 
-	// --Ğ´Êı¾İ¿â
+	// --å†™æ•°æ®åº“
 
-	// ±àÂëÓ¦´ğ±¨ÎÄ  ´«³ö
+	// ç¼–ç åº”ç­”æŠ¥æ–‡  ä¼ å‡º
 	ret = MsgEncode(&msgKey_Res, ID_MsgKey_Res, outData, datalen);
 	if (ret != 0) {
 		KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[4], ret, "serverAgree MsgEncode() err:%d", ret);	
@@ -88,10 +96,11 @@ int MngServer_Agree(MngServer_Info *svrInfo, MsgKey_Req *msgkeyReq, unsigned cha
 	return 0;	
 }
 
-
+/*
 int MngServer_Check(MngServer_Info *svrInfo, MsgKey_Req *msgkeyReq, unsigned char **outData, int *datalen)
 {
 	
 	
 	return 0;	
 }
+*/

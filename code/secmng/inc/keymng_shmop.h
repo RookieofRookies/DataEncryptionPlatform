@@ -1,7 +1,4 @@
 
-
-// keymng_shmop.h
-
 #ifndef _KEYMNG_SHMOP_H_
 #define _KEYMNG_SHMOP_H_
 
@@ -14,19 +11,18 @@
 extern "C" {
 #endif
 
-//½«ÍøµãÃÜÔ¿ĞÅÏ¢Ğ´¹²ÏíÄÚ´æ£¬ Íøµã¹²ÏíÄÚ´æ½á¹¹Ìå
+//å°†ç½‘ç‚¹å¯†é’¥ä¿¡æ¯å†™å…±äº«å†…å­˜ï¼Œ ç½‘ç‚¹å…±äº«å†…å­˜ç»“æ„ä½“
 typedef struct _NodeSHMInfo
 {	
-	int 			status;			//ÃÜÔ¿×´Ì¬ 0-ÓĞĞ§ 1ÎŞĞ§
-	char			clientId[12];	//¿Í»§¶Ëid
-	char			serverId[12];	//·şÎñÆ÷¶Ëid	
-	int				seckeyid;		//¶Ô³ÆÃÜÔ¿id
-	unsigned char	seckey[128];	//¶Ô³ÆÃÜÔ¿ //hash1 hash256 md5
+	int 			status;			//å¯†é’¥çŠ¶æ€ 0-æœ‰æ•ˆ 1æ— æ•ˆ
+	char			clientId[12];	//å®¢æˆ·ç«¯id
+	char			serverId[12];	//æœåŠ¡å™¨ç«¯id	
+	int				seckeyid;		//å¯¹ç§°å¯†é’¥id
+	unsigned char	seckey[128];	//å¯¹ç§°å¯†é’¥ //hash1 hash256 md5
 }NodeSHMInfo;
 
 
-//int KeyMng_ShmInit(int keyid, int keysize, void *shmid )
-//´ò¿ª¹²ÏíÄÚ´æ ¹²ÏíÄÚ´æ´æÔÚÔòÊ¹ÓÃ ²»´æÔÚÔò´´½¨
+
 int KeyMng_ShmInit(int key, int maxnodenum, int *shmhdl);
 
 int KeyMng_ShmWrite(int shmhdl, int maxnodenum, NodeSHMInfo *pNodeInfo);

@@ -1,0 +1,23 @@
+#编译
+make
+
+#运行服务器
+./keymngserver
+
+#运行服务器管理程序
+./keymngcrypt
+
+#运行客户端
+./keymngclient
+
+#退出服务器
+./stopserver
+
+#加密后输出文件名：encrypt_out
+#加密后输出文件名：decrypt_out
+
+#清空共享内存
+./cleanipc user shm|sem|smg|all
+
+#清空编译文件，可执行文件
+make clean

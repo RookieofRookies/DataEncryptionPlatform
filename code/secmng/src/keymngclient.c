@@ -2,20 +2,11 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <time.h>
+
 #include "keymngclientop.h"
 #include "keymng_msg.h"
 #include "keymnglog.h"
-
-int main111(void)
-{
-	KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[0], 0, "%s", "00000000000000");
-	KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[1], 1, "%s", "11111111111111");
-	KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[2], 2, "%s", "22222222222222");
-	KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[3], 3, "%s", "33333333333333");
-	KeyMng_Log(__FILE__, __LINE__, KeyMngLevel[4], 4, "%s", "44444444444444");
-	
-	return 0;	
-}
 
 int Usage()
 {
@@ -25,9 +16,9 @@ int Usage()
     printf("\n  /*************************************************************/");
     printf("\n  /*************************************************************/");
     printf("\n  /*     1.密钥协商                                            */");
-    printf("\n  /*     2.密钥校验                                            */");
-    printf("\n  /*     3.密钥注销                                            */");
-    printf("\n  /*     4.密钥查看                                            */");
+    printf("\n  /*     2.密钥查看                                            */");
+	printf("\n  /*     3.文件加密                                            */");
+	printf("\n  /*     4.文件解密                                            */");
     printf("\n  /*     0.退出系统                                            */");
     printf("\n  /*************************************************************/");
     printf("\n  /*************************************************************/");
@@ -42,6 +33,8 @@ int main()
 {
 	int 				ret = 0;
 	int 				nSel = 0;
+
+	srand((unsigned)time(NULL));
 	
 	MngClient_Info		mngClientInfo;
 	memset(&mngClientInfo, 0, sizeof(MngClient_Info));
@@ -65,11 +58,17 @@ int main()
 			//密钥协商
 			ret = MngClient_Agree(&mngClientInfo);
 			break;
-		case KeyMng_Check:	
-			ret = MngClient_Check(&mngClientInfo);
+		case KeyMng_View:
+			//密钥查看
+			ret = MngClient_View(&mngClientInfo);
 			break;
-		case KeyMng_Revoke:	
-			//密钥注销
+		case KeyMng_Encrypt:
+			//加密文件
+			ret = MngClient_Encrypt(&mngClientInfo);
+			break;
+		case KeyMng_Decrypt:
+			//解密文件
+			ret = MngClient_Decrypt(&mngClientInfo);
 			break;
 		case 0:	
 			//退出
@@ -88,7 +87,7 @@ int main()
 		}
 		else
 		{
-			printf("\n!!!!!!!!!!!!!!!!!!!SUCCESS!!!!!!!!!!!!!!!!!!!!\n");
+			printf("\n操作成功，ENTER继续\n");
 		}	
 		getchar();	
 	}
